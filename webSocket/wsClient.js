@@ -1,6 +1,8 @@
 const io = require('socket.io-client');
-const { createURL } = require('../common');
 require('dotenv').config();
+
+const { createURL } = require('../common');
+
 
 const socketClient = io(createURL(process.env.HOST, process.env.PORT));
 
