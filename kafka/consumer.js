@@ -1,19 +1,16 @@
-const { Kafka } = require('kafkajs')
+const { Kafka } = require('kafkajs');
+require('dotenv').config();
 
 const kafka = new Kafka({
     clientId: 'my-app',
-    brokers: ['localhost:19092', 'localhost:29092', 'localhost:39092'],
+    brokers: getBootstrapServers(),
 });
 
-const consumer = kafka.consumer({ groupId: 'test-group-2' });
-
-// const TOPIC = 'wingsexp5-machine';
-// const TOPIC = 'dev.api.kiosk.node.three.json';
-const TOPIC = 'dev.api.kiosk.node.three.json';
+const consumer = kafka.consumer({ groupId: process.env.GROUP_ID });
 
 const run  = async (runner) => {
     await consumer.connect();
-    await consumer.subscribe({ topics: [TOPIC], fromBeginning: true });
+    await consumer.subscribe({ topics: getTopics(), fromBeginning: true });
     await consumer.run({
         eachMessage: async({ topic, partition, message }) => {
             console.log( "topic:" + topic );
@@ -28,3 +25,11 @@ const run  = async (runner) => {
 }
 
 module.exports.run = run;
+
+function getBootstrapServers() {
+    return process.env.BOOTSTRAP_SERVER.split(',');
+}
+
+function getTopics() {
+    return process.env.TOPIC.split(',');
+}
