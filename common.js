@@ -1,3 +1,3 @@
-const createURL = (uri, port) => `http://${uri}:${port}`;
+const makeURLFormat = (uri, port) => `http://${uri}:${port}`;
 
-module.exports.createURL = createURL;
+module.exports.makeURLFormat = makeURLFormat;

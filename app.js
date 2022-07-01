@@ -1,10 +1,10 @@
 const io = require('socket.io-client');
 
 const { run } = require('./kafka/consumer');
-const { createURL } = require('./common');
+const { makeURLFormat } = require('./common');
 
 
-const socketClient = io(createURL(process.env.HOST, process.env.PORT));
+const socketClient = io(makeURLFormat(process.env.HOST, process.env.PORT));
 
 run(({topic, partition, message}) => {
     socketClient.on('connect', (value) => {
