@@ -11,17 +11,20 @@ const consumer = kafka.consumer({ groupId: 'test-group-2' });
 // const TOPIC = 'dev.api.kiosk.node.three.json';
 const TOPIC = 'dev.api.kiosk.node.three.json';
 
-const run  = async () => {
+const run  = async (runner) => {
     await consumer.connect();
     await consumer.subscribe({ topics: [TOPIC], fromBeginning: true });
     await consumer.run({
         eachMessage: async({ topic, partition, message }) => {
             console.log( "topic:" + topic );
             console.log( "partition:" + partition );
+
             console.log({ value: message.value});
             console.log({ value: message.value.toString()});
+
+            runner({ topic, partition, message });
         },
     });
 }
 
-run().catch(e => console.error(`[]`, e));
+module.exports.run = run;

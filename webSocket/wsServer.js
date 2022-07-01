@@ -8,9 +8,21 @@ const io = new Server(server);
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
-
+io.socket
 io.on('connection', (socket) => {
   console.log('a user connected');
+  console.log('--Info------------------');
+  console.log(`WebSocket id : ${socket.id}`)
+  console.log('[ room list ]');
+  console.log(socket.rooms);
+
+  socket.on('message', (message) => {
+    socket.broadcast.emit('message', message);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('disconnect');
+  });
 });
 
 server.listen(3000, () => {
