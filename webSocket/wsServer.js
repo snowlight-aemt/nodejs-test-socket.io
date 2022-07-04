@@ -7,6 +7,19 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 
 
+const nsp1 = io.of('/nsp1');
+
+nsp1.on('connect', (socket) => {
+    console.log('nsp1 connect');
+    socket.emit('message', 'nsp1 messages');
+
+    socket.on('message', (message) => {
+      console.log('receive message fro nsp1');
+      socket.broadcast.emit('message', 'all nsp1 message ' + message);
+    })
+});
+
+
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
